@@ -1,0 +1,8 @@
+package org.abimon.mods.minecraft.deco;
+
+import net.minecraft.item.Item;
+
+public class DecoItem extends Item 
+{
+	
+}

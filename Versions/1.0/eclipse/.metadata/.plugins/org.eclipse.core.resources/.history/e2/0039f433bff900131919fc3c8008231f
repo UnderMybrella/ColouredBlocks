@@ -1,0 +1,158 @@
+package org.abimon.mods.minecraft.coloureds;
+
+import net.minecraft..;
+import net.minecraft..Anvil;
+import net.minecraft..Beacon;
+import net.minecraft..BrewingStand;
+import net.minecraft..Cauldron;
+import net.minecraft..Cocoa;
+import net.minecraft..DoublePlant;
+import net.minecraft..DragonEgg;
+import net.minecraft..EndPortalFrame;
+import net.minecraft..Fence;
+import net.minecraft..FenceGate;
+import net.minecraft..Fire;
+import net.minecraft..FlowerPot;
+import net.minecraft..Hopper;
+import net.minecraft..Pane;
+import net.minecraft..RailBase;
+import net.minecraft..RedstoneComparator;
+import net.minecraft..RedstoneDiode;
+import net.minecraft..RedstoneRepeater;
+import net.minecraft..Stairs;
+import net.minecraft..Wall;
+import net.minecraft.client.renderer.Renders;
+import net.minecraft.world.IAccess;
+import cpw.mods.fml.client.registry.ISimpleRenderingHandler;
+
+public class ColouredRenderer implements ISimpleRenderingHandler {
+
+	@Override
+	public void renderInventory( , int metadata, int modelId,
+			Renders renderer) 
+	{}
+
+	@Override
+	public boolean renderWorld(IAccess world, int x, int y, int z,
+			 , int modelId, Renders renderer) {
+		if(getRenderId() != modelId)
+			return false;
+		else
+		{
+			if(!(world.getTileEntity(x, y, z) instanceof TileEntityColoured))
+				return false;
+			int renderID = ((TileEntityColoured) world.getTileEntity(x, y, z))..getRenderType();
+			boolean shouldRenderAsSpecial = shouldRenderAsSpecial(renderID);
+			if(shouldRenderAsSpecial)
+				render(renderer, , x, y, z, renderID);
+			else
+				renderer.renderStandard(, x, y, z);
+			return true;
+		}
+	}
+
+	private void render(Renders renderer,  , int x, int y,
+			int z, int renderID) {
+		switch(renderID){
+		case 0 : return this.renderStandard(p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 4: return this.renderLiquid(p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 31: return this.renderLog(p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 1: return this.renderCrossedSquares(p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 40: return this.renderDoublePlant((DoublePlant)p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 2: return this.renderTorch(p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 20: return this.renderVine(p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 11: return this.renderFence((Fence)p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 39: return this.renderQuartz(p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 5: return this.renderRedstoneWire(p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 13: return this.renderCactus(p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 9: return this.renderMinecartTrack((RailBase)p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 19: return this.renderStem(p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 23: return this.renderLilyPad(p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 6: return this.renderCrops(p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 3: return this.renderFire((Fire)p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 8: return this.renderLadder(p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 7: return this.renderDoor(p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 10: return this.renderStairs((Stairs)p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 27: return this.renderDragonEgg((DragonEgg)p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 32: return this.renderWall((Wall)p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 12: return this.renderLever(p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 29: return this.renderTripWireSource(p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 30: return this.renderTripWire(p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 14: return this.renderBed(p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 15: return this.renderRepeater((RedstoneRepeater)p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 36: return this.renderRedstoneDiode((RedstoneDiode)p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 37: return this.renderRedstoneComparator((RedstoneComparator)p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 16: return this.renderPistonBase(p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_, false) ;
+		case 17: return this.renderPistonExtension(p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_, true) ;
+		case 18: return this.renderPane((Pane)p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 41: return this.renderStainedGlassPane(p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 21: return this.renderFenceGate((FenceGate)p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 24: return this.renderCauldron((Cauldron)p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 33: return this.renderFlowerpot((FlowerPot)p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 35: return this.renderAnvil((Anvil)p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 25: return this.renderBrewingStand((BrewingStand)p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 26: return this.renderEndPortalFrame((EndPortalFrame)p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 28: return this.renderCocoa((Cocoa)p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 34: return this.renderBeacon((Beacon)p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_) ;
+		case 38: return this.renderHopper((Hopper)p_147805_1_, p_147805_2_, p_147805_3_, p_147805_4_);
+		}
+
+		public boolean shouldRenderAsSpecial(int renderID) 
+		{
+			switch(renderID)
+			{
+			case 40:
+				return false;
+			case 11:
+				return false;
+			case 9:
+				return false;
+			case 3:
+				return false;
+			case 10:
+				return false;
+			case 27:
+				return false;
+			case 32:
+				return false;
+			case 15:
+				return false;
+			case 36:
+				return false;
+			case 37:
+				return false;
+			case 18:
+				return false;
+			case 21:
+				return false;
+			case 24:
+				return false;
+			case 35:
+				return false;
+			case 33:
+				return false;
+			case 25:
+				return false;
+			case 26:
+				return false;
+			case 28:
+				return false;
+			case 34:
+				return false;
+			case 38:
+				return false;
+			}
+			return true;
+		}
+
+		@Override
+		public boolean shouldRender3DInInventory(int modelId) {
+			return false;
+		}
+
+		@Override
+		public int getRenderId() {
+			return Coloureds.RENDER;
+		}
+
+	}

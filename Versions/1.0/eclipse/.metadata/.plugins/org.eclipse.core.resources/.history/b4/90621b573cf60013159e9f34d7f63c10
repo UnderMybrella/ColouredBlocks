@@ -1,0 +1,21 @@
+package org.abimon.mods.minecraft.colouredBlocks;
+
+import java.awt.Color;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+
+public class TileEntityColoured extends TileEntity 
+{
+	Color color = new Color(255, 255, 255);
+	
+	public void readFromNBT(NBTTagCompound nbt)
+	{
+		super.readFromNBT(nbt);
+	}
+	
+	public void writeToNBT(NBTTagCompound nbt)
+	{
+		super.writeToNBT(nbt);
+	}
+}

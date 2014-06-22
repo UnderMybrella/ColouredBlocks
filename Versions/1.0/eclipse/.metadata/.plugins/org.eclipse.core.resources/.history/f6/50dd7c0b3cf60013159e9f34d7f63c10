@@ -1,0 +1,32 @@
+package org.abimon.mods.minecraft.colouredBlocks;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
+public class BlockColoured extends Block implements ITileEntityProvider, IColourable{
+
+	public BlockColoured() {
+		super(Material.cake);
+	}
+
+	@Override
+	public TileEntity createNewTileEntity(World var1, int var2) {
+		return null;
+	}
+
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int face, float posX, float posY, float posZ)
+    {
+    	ItemStack item = player.getHeldItem();
+    	if(!(item.getItem() instanceof IColouring))
+    		return false;
+    	
+        return false;
+    }
+
+
+}

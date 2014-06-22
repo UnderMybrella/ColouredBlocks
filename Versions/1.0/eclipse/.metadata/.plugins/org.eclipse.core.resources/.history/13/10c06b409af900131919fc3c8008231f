@@ -1,0 +1,94 @@
+package org.abimon.mods.minecraft.colouredBlocks;
+
+import java.awt.Color;
+import java.util.List;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IIcon;
+
+public class ItemColouringEssense extends Item implements IColouring
+{
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) 
+	{
+		NBTTagCompound nbt = par1ItemStack.getTagCompound();
+		if(nbt == null)
+		{
+			nbt = new NBTTagCompound();
+			Color c = new Color(16777215);
+			nbt.setInteger("Red", c.getRed());
+			nbt.setInteger("Green", c.getGreen());
+			nbt.setInteger("Blue", c.getBlue());
+			nbt.setInteger("RGB", c.getRGB());
+			par1ItemStack.setTagCompound(nbt);
+		}
+		par3List.add(EnumChatFormatting.RED + "Red: " + nbt.getInteger("Red"));
+		par3List.add(EnumChatFormatting.GREEN + "Green: " + nbt.getInteger("Green"));
+		par3List.add(EnumChatFormatting.AQUA + "Blue: " + nbt.getInteger("Blue"));
+		par3List.add(EnumChatFormatting.ITALIC + "Uses left: " + (256 - par1ItemStack.getItemDamage()));
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public boolean requiresMultipleRenderPasses()
+	{
+		return true;
+	}
+	
+	public int getMaxDamage()
+	{
+		return 1;
+	}
+
+	@Override
+	public Color getColour(ItemStack item) {
+		NBTTagCompound nbt = item.getTagCompound();
+		if(nbt == null)
+		{
+			nbt = new NBTTagCompound();
+			Color c = new Color(16777215);
+			nbt.setInteger("Red", c.getRed());
+			nbt.setInteger("Green", c.getGreen());
+			nbt.setInteger("Blue", c.getBlue());
+			nbt.setInteger("RGB", c.getRGB());
+			item.setTagCompound(nbt);
+		}
+		Color color = new Color(nbt.getInteger("Red"), nbt.getInteger("Green"), nbt.getInteger("Blue"));
+		return color;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public int getColorFromItemStack(ItemStack par1ItemStack, int pass)
+	{
+		NBTTagCompound nbt = par1ItemStack.getTagCompound();
+		if(nbt == null)
+		{
+			nbt = new NBTTagCompound();
+			Color c = new Color(16777215);
+			nbt.setInteger("Red", c.getRed());
+			nbt.setInteger("Green", c.getGreen());
+			nbt.setInteger("Blue", c.getBlue());
+			nbt.setInteger("RGB", c.getRGB());
+			par1ItemStack.setTagCompound(nbt);
+		}
+		if(!nbt.hasKey("RGB"))
+			nbt.setInteger("RGB", new Color(nbt.getInteger("Red"), nbt.getInteger("Green"), nbt.getInteger("Blue")).getRGB());
+		if(pass == 0)
+			return 16777215;
+		else
+			return nbt.getInteger("RGB");
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(ItemStack stack, int pass)
+	{
+		if(pass == 1)
+			return crayonColour;
+		else
+			return crayon;
+	}
+}

@@ -1,0 +1,16 @@
+[
+{
+  "modid": "colouredblocks",
+  "name": "ColouredBlocks Mod",
+  "description": "The uncolourable can become colourable",
+  "version": "1.0",
+  "mcversion": "1.7.2",
+  "url": "",
+  "updateUrl": "abimon.org/mods/minecraft/colouredblocks.jar",
+  "authorList": ["UnderMybrella"],
+  "credits": "The Forge and FML guys, for making Forge and FML",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

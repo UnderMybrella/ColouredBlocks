@@ -1,0 +1,6 @@
+package org.abimon.mods.minecraft.colouredBlocks;
+
+public interface IColourable 
+{
+	/** */
+}

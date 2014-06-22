@@ -1,0 +1,7 @@
+package org.abimon.mods.minecraft.colouredBlocks;
+
+public interface IColourable 
+{
+	/** */
+	public void onBlockColoured(ItemStack itemstack, World world, int x, int y, int z);
+}

@@ -1,0 +1,46 @@
+package org.abimon.mods.minecraft.dnc;
+
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.ContainerWorkbench;
+import net.minecraft.network.play.server.S2DPacketOpenWindow;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
+public class BlockAlchemical extends BlockContainer 
+{
+	public BlockAlchemical()
+	{
+		super(Material.rock);
+	}
+
+	@Override
+	public TileEntity createNewTileEntity(World var1, int var2) {
+		return new TileEntityAlchemical();
+	}
+
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_)
+	{
+		if (world.isRemote)
+		{
+			return true;
+		}
+		else
+		{
+			if(player instanceof EntityPlayerMP)
+			{
+				((EntityPlayerMP) player).getNextWindowId();
+				((EntityPlayerMP) player).playerNetServerHandler.sendPacket(new S2DPacketOpenWindow(((EntityPlayerMP) player).currentWindowId, 1, "Crafting", 9, true));
+				((EntityPlayerMP) player).openContainer = new ContainerWorkbench(((EntityPlayerMP) player).inventory, world, x, y, z);
+				((EntityPlayerMP) player).openContainer.windowId = ((EntityPlayerMP) player).currentWindowId;
+				((EntityPlayerMP) player).openContainer.addCraftingToCrafters(((EntityPlayerMP) player));
+			}
+			else
+				System.out.println(player.getClass());
+			return true;
+		}
+	}
+}

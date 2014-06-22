@@ -1,0 +1,14 @@
+package org.abimon.mods.minecraft.colouredBlocks;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemBlockWithMetadata;
+
+public class ItemBlockDye extends ItemBlockWithMetadata 
+{
+
+	public ItemBlockDye(Block p_i45326_1_) {
+		super(p_i45326_1_, p_i45326_2_);
+		// TODO Auto-generated constructor stub
+	}
+
+}

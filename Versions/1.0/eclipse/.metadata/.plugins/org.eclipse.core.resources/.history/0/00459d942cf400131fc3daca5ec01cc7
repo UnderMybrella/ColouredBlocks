@@ -1,0 +1,24 @@
+package org.abimon.mods.minecraft.dnc;
+
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.ICommandSender;
+
+public class CommandCreateDamageSource extends CommandBase {
+
+	@Override
+	public String getCommandName() {
+		return "createDnCDamageSource";
+	}
+
+	@Override
+	public String getCommandUsage(ICommandSender var1) {
+		return "/createDnCDamageSource <damageName> <override> <deathMessage> <playerMessage> <itemMessage> <isProjectile> <isExplosion> <canHarmInCreative> <isUnblockable> <isDamageAbsolute> <isFireDamage> <isDamageScaled> <isMagicDamage>";
+	}
+
+	@Override
+	public void processCommand(ICommandSender var1, String[] var2) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

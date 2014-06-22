@@ -1,0 +1,10 @@
+package org.abimon.mods.minecraft.colouredBlocks;
+
+import java.util.LinkedList;
+import java.util.concurrent.locks.Lock;
+
+public class LockedList<T>
+{
+	LinkedList<T> list = new LinkedList<T>();
+	ReentrantLock lock;
+}

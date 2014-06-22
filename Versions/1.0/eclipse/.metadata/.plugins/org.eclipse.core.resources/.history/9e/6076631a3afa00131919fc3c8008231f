@@ -1,0 +1,65 @@
+package org.abimon.mods.minecraft.colouredBlocks;
+
+import java.util.Random;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemColored;
+import net.minecraft.item.ItemStack;
+
+public class ItemBlockDye extends ItemColored
+{
+	public ItemBlockDye(Block p_i45326_1_) {
+		super(p_i45326_1_);
+		this.hasSubtypes = true;
+		this.setMaxStackSize(64);
+	}
+
+	public String getUnlocalizedName(ItemStack par1ItemStack)
+	{
+		int damage = par1ItemStack.getItemDamage();
+		return ColouredBlocks.MODID + ":dyeBlock:" + damage + (ColouredBlocks.doRareNames ? ".rare" : "");
+	}
+
+	@Override
+	public int getColorFromItemStack(ItemStack item, int num)
+	{
+		switch(item.getItemDamage())
+		{
+		case 0:
+			return 1644825;
+		case 1:
+			return 10040115;
+		case 2:
+			return 6717235;
+		case 3:
+			return 6704179;
+		case 4:
+			return 3361970;
+		case 5:
+			return 8339378;
+		case 6:
+			return 5013401;
+		case 7:
+			return 10066329;
+		case 8:
+			return 5000268;
+		case 9:
+			return 15892389;
+		case 10:
+			return 8375321;
+		case 11:
+			return 15066419;
+		case 12:
+			return 6724056;
+		case 13:
+			return 11685080;
+		case 14:
+			return 14188339;
+		default:
+			return 16777215;
+		}
+	}
+}

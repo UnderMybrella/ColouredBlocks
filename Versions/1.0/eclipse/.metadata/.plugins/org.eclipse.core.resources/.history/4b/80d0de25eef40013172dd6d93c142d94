@@ -1,0 +1,93 @@
+package org.abimon.mods.minecraft.dnc;
+
+import java.util.Arrays;
+
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.command.PlayerNotFoundException;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemEditableBook;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemWritableBook;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.server.MinecraftServer;
+
+public class CommandUseCommand extends CommandBase {
+
+	@Override
+	public String getCommandName() {
+		return "useCommand";
+	}
+
+	@Override
+	public String getCommandUsage(ICommandSender var1) {
+		return "/useCommand";
+	}
+
+    public int getRequiredPermissionLevel()
+	{
+		return 1;
+	}
+
+	@Override
+	public void processCommand(ICommandSender var1, String[] var2) {
+		System.out.println(Arrays.toString(var2));
+		EntityPlayerMP player = getPlayer(var1, var2[0]);
+		boolean allPlayers = false;
+		if(var2[0].equals("@a"))
+		{
+			player = getPlayer(var1, "@p");
+			allPlayers = true;
+		}
+		ItemStack item = player.getHeldItem();
+		if(item == null)
+			throw new CommandException("Player " + player.getCommandSenderName() + " is not holding a valid item!");
+		if(item.getItem() instanceof ItemWritableBook || item.getItem() instanceof ItemEditableBook)
+		{
+			try
+			{
+				String command = joinPages(item.getTagCompound().getTag("pages"));
+				MinecraftServer.getServer().getCommandManager().executeCommand(player, command);
+				if(allPlayers)
+					for(Object p : MinecraftServer.getServer().getConfigurationManager().playerEntityList)
+						MinecraftServer.getServer().getCommandManager().executeCommand((EntityPlayerMP) p, command);
+			}
+			catch(CommandException th)
+			{
+				throw th;
+			}
+		}
+		else if(item.getTagCompound().hasKey("UseCommand"))
+		{
+			try
+			{
+				MinecraftServer.getServer().getCommandManager().executeCommand(player, item.getTagCompound().getString("UseCommand"));
+				if(allPlayers)
+					for(Object p : MinecraftServer.getServer().getConfigurationManager().playerEntityList)
+						MinecraftServer.getServer().getCommandManager().executeCommand((EntityPlayerMP) p, item.getTagCompound().getString("UseCommand"));
+			}
+			catch(CommandException th)
+			{
+				throw th;
+			}
+		}
+		else
+			throw new CommandException("Player " + player.getCommandSenderName() + " is not holding a valid item!");
+	}
+
+	private String joinPages(NBTBase tag) {
+		if(tag instanceof NBTTagList)
+		{
+			String joined = "";
+			NBTTagList list = (NBTTagList) tag;
+			for(int i = 0; i < list.tagCount(); i++)
+				joined += list.getStringTagAt(i);
+			return joined;
+		}
+		return null;
+	}
+
+}

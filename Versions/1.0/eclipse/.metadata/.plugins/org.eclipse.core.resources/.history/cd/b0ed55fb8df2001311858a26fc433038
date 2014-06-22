@@ -1,0 +1,219 @@
+package org.abimon.mods.minecraft.dnc;
+
+import java.awt.Color;
+import java.util.HashMap;
+import java.util.List;
+
+import com.google.common.collect.Multimap;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumAction;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
+import baubles.api.BaubleType;
+import baubles.api.IBauble;
+
+public class ItemDnC extends Item implements IBauble
+{
+
+	public static final HashMap<String, IIcon> ICONS = new HashMap<String, IIcon>();
+	
+	public String getItemStackDisplayName(ItemStack par1ItemStack)
+	{
+		return formatNicely(getNBT(par1ItemStack).getString("Name"));
+	}
+
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) 
+	{
+		System.out.println(getNBT(par1ItemStack).getString("Information"));
+		for(String s : getNBT(par1ItemStack).getString("Information").split("\n"))
+			par3List.add(formatNicely(s));
+		for(String s : getNBT(par1ItemStack).toString().split(","))
+			par3List.add(formatNicely("_&a" + s));
+	}
+
+	public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
+	{
+		return getNBT(par1ItemStack).getInteger("Colour");
+	}
+
+	public String formatNicely(String string)
+	{
+		String str = string.replace("_&", "\u00a7");
+		str.replace("\\\\", "\\");
+		return str;
+	}
+
+	public NBTTagCompound getNBT(ItemStack item)
+	{
+		NBTTagCompound nbt = item.getTagCompound();
+		if(nbt == null)
+			nbt = new NBTTagCompound();
+		if(!nbt.hasKey("Type"))
+			nbt.setInteger("Type", 0);
+		if(!nbt.hasKey("Name"))
+			nbt.setString("Name", "Mundane Amulet of Awesomeness");
+		if(!nbt.hasKey("Information"))
+			nbt.setString("Information", "Nothing Here!\n" + EnumChatFormatting.GOLD.toString() + EnumChatFormatting.BOLD.toString() + EnumChatFormatting.UNDERLINE.toString() + EnumChatFormatting.ITALIC.toString() + "But We Might Add Something");
+		if(!nbt.hasKey("Colour"))
+			nbt.setInteger("Colour", 16777215);
+		if(!nbt.hasKey("UseDuration"))
+			nbt.setInteger("UseDuration", 0);
+		if(!nbt.hasKey("UseAction"))
+			nbt.setString("UseAction", "none");
+		if(!nbt.hasKey("MaxDamage"))
+			nbt.setInteger("MaxDamage", 0);
+		if(!nbt.hasKey("HungerRestored"))
+			nbt.setInteger("HungerRestored", 0);
+		if(!nbt.hasKey("Saturation"))
+			nbt.setInteger("Saturation", 0);
+		if(!nbt.hasKey("EntityLifespan"))
+			nbt.setInteger("EntityLifespan", 6000);
+		if(!nbt.hasKey("IsConsumable"))
+			nbt.setBoolean("IsConsumable", false);
+		if(!nbt.hasKey("MobDamage"))
+			nbt.setFloat("MobDamage", 1);
+		item.setTagCompound(nbt);
+		return item.getTagCompound();
+	}
+
+	public ItemStack onEaten(ItemStack par1ItemStack, World par3World, EntityPlayer player)
+	{
+		if(par3World.isRemote)
+			return par1ItemStack;
+
+    	NBTTagCompound nbt = getNBT(par1ItemStack);
+    	if(getMaxDamage(par1ItemStack) > 0)
+    		par1ItemStack.damageItem(1, player);
+    	else if(nbt.getBoolean("IsConsumable"))
+    		par1ItemStack.stackSize--;
+    	player.getFoodStats().addStats(nbt.getInteger("HungerRestored"), nbt.getInteger("Saturation"));
+        return par1ItemStack;
+    }
+    
+    public ItemStack onItemRightClick(ItemStack par1ItemStack, World par3World, EntityPlayer player)
+    {
+		System.out.println(this.getMaxItemUseDuration(par1ItemStack));
+        player.setItemInUse(par1ItemStack, this.getMaxItemUseDuration(par1ItemStack));
+        return par1ItemStack;
+    }
+	
+    public int getMaxDamage(ItemStack stack)
+    {
+        return getNBT(stack).getInteger("MaxDamage");
+    }
+
+	/**
+	 * How long it takes to use or consume an item
+	 */
+	public int getMaxItemUseDuration(ItemStack par1ItemStack)
+	{
+		int duration = getNBT(par1ItemStack).getInteger("UseDuration");
+		return duration > 32 ? 32 : duration;
+	}
+	
+    public int getEntityLifespan(ItemStack itemStack, World world)
+    {
+        return getNBT(itemStack).getInteger("EntityLifespan");
+    }
+
+	/**
+	 * returns the action that specifies what animation to play when the items is being used
+	 */
+	public EnumAction getItemUseAction(ItemStack par1ItemStack)
+	{
+		try
+		{
+			EnumAction act = EnumAction.valueOf(getNBT(par1ItemStack).getString("UseAction").toLowerCase());
+			return act;
+		}
+		catch(Throwable th)
+		{
+			return EnumAction.none;
+		}
+	}
+
+
+	@Override
+	public BaubleType getBaubleType(ItemStack itemstack) 
+	{
+		switch(getNBT(itemstack).getInteger("Type"))
+		{
+		case 0:
+			return BaubleType.AMULET;
+		case 1:
+			return BaubleType.BELT;
+		case 2:
+			return BaubleType.RING;
+		}
+		return BaubleType.AMULET;
+	}
+
+	@Override
+	public void onWornTick(ItemStack itemstack, EntityLivingBase player) {
+
+	}
+
+	@Override
+	public void onEquipped(ItemStack itemstack, EntityLivingBase player) {
+
+	}
+
+	@Override
+	public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {
+
+	}
+
+	@Override
+	public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
+		return true;
+	}
+
+	@Override
+	public boolean canUnequip(ItemStack itemstack, EntityLivingBase player) {
+		return false;
+	}
+	
+    /**
+     * Return the correct icon for rendering based on the supplied ItemStack and render pass.
+     *
+     * Defers to {@link #getIconFromDamageForRenderPass(int, int)}
+     * @param stack to render for
+     * @param pass the multi-render pass
+     * @return the icon
+     */
+	@Override
+    public IIcon getIconIndex(ItemStack stack)
+    {
+    	NBTTagCompound nbt = getNBT(stack);
+    	String iconName = nbt.getString("TextureName");
+    	if(ICONS.containsKey(iconName))
+    		return ICONS.get(iconName);
+    	else
+    		ICONS.put(iconName, DungeonsAndCreepers.items.registerIcon(iconName));
+    	return ICONS.get(iconName);
+    }
+    
+    public IIcon getIcon(ItemStack stack, int pass)
+    {
+    	return getIconIndex(stack);
+    }
+
+    public boolean hitEntity(ItemStack par1ItemStack, EntityLivingBase beingAttacked, EntityLivingBase attacking)
+    {
+    	beingAttacked.heal(1);
+    	beingAttacked.attackEntityFrom(DamageSource.causeMobDamage(attacking), getNBT(par1ItemStack).getFloat("Damage"));
+        return false;
+    }
+    
+}

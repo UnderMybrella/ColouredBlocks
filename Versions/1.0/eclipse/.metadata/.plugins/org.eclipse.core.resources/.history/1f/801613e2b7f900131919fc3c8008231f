@@ -1,0 +1,12 @@
+itemGroup.colouredblocks:creativeTab=Coloured Blocks
+item.colouredblocks:crayon.name=Crayon
+item.colouredblocks:essense.name=Colouring Essense
+
+colouredblocks:dyeBlock:0=Block of Black Dye
+colouredblocks:dyeBlock:1=Block of Red Dye
+colouredblocks:dyeBlock:2=Block of Green Dye
+colouredblocks:dyeBlock:3=Block of Brown Dye
+colouredblocks:dyeBlock:4=Block of Blue Dye
+colouredblocks:dyeBlock:5=Block of Purple Dye
+colouredblocks:dyeBlock:5.rare=Jaded Block
+colouredblocks:dyeBlock:6=Block of Cyan Dye

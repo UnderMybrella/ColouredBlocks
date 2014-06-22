@@ -1,0 +1,48 @@
+package org.abimon.mods.minecraft.dnc;
+
+import java.util.HashMap;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.WorldServer;
+
+public class WeightThread extends Thread 
+{
+	public static WeightMap map;
+
+	public void run()
+	{
+		while(true)
+		{
+			MinecraftServer server = MinecraftServer.getServer();
+			for(WorldServer world : server.worldServers)
+			{
+				for(Object o : world.playerEntities)
+					if(o instanceof EntityPlayer)
+					{
+						EntityPlayer player = (EntityPlayer) o;
+						InventoryPlayer inv = player.inventory;
+						if(!inv.inventoryChanged)
+							continue;
+						
+						int weight = 0;
+						
+						for(ItemStack i : inv.mainInventory)
+							weight += map.getWeightForObject(i);
+						
+						if(weight > 100)
+							player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 10));
+						
+						player.inventory.inventoryChanged = false;
+					}
+					else
+						System.out.println(o.getClass());
+			}
+		}
+	}
+}

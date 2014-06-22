@@ -1,0 +1,8 @@
+package org.abimon.mods.minecraft.dnc.mapGen;
+
+import net.minecraft.world.gen.structure.MapGenStructure;
+
+public class MapGenAlchemyBasic extends MapGenStructure
+{
+
+}

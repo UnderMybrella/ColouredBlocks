@@ -1,0 +1,24 @@
+package org.abimon.mods.minecraft.dnc.mapGen;
+
+import net.minecraft.world.gen.structure.MapGenStructure;
+import net.minecraft.world.gen.structure.StructureStart;
+
+public class MapGenAlchemyBasic extends MapGenStructure
+{
+
+	@Override
+	public String func_143025_a() {
+		return "dnc:AlchemyBasic";
+	}
+
+	@Override
+	protected boolean canSpawnStructureAtCoords(int var1, int var2) {
+		return true;
+	}
+
+	@Override
+	protected StructureStart getStructureStart(int var1, int var2) {
+		return null;
+	}
+
+}

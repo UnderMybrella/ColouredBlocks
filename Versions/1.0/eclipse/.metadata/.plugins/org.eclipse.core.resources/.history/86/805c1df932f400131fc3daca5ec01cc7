@@ -1,0 +1,114 @@
+package org.abimon.mods.minecraft.dnc;
+
+import java.util.HashMap;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.ICommandManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.management.ServerConfigurationManager;
+import net.minecraft.world.WorldServer;
+
+public class WeightThread extends Thread 
+{
+	public void registerCommands(MinecraftServer server)
+	{
+		ICommandManager icm = server.getCommandManager();
+		for(CommandBase cb : DungeonsAndCreepers.commands)
+			icm.getCommands().put(cb.getCommandName(), cb);
+	}
+	
+	public void run()
+	{	
+		try
+		{
+			Thread.sleep(5000);
+			MinecraftServer server = MinecraftServer.getServer();
+			while(server == null)
+			{
+				Thread.sleep(1000);
+				server = MinecraftServer.getServer();
+			}
+			ServerConfigurationManager scm = server.getConfigurationManager();
+			while(scm == null)
+			{
+				Thread.sleep(1000);
+				scm = server.getConfigurationManager();
+			}
+			int players = 0;
+			
+			registerCommands(server);
+
+			while(true)
+			{
+				System.out.print(players + "|");
+				players = 0;
+				try
+				{
+					for(String s : server.getAllUsernames())
+					{
+						Object o = scm.getPlayerForUsername(s);
+						System.out.println(o);
+						if(o instanceof EntityPlayer)
+						{
+							EntityPlayer player = (EntityPlayer) o;
+							InventoryPlayer inv = player.inventory;
+
+							long weight = 0;
+
+							for(ItemStack i : inv.mainInventory)
+							{
+								if(i == null)
+									continue;
+								long individual = 0L;
+								individual += DungeonsAndCreepers.getWeight(new ItemStack(i.getItem(), 1, i.getItemDamage()));
+								weight += (individual * i.stackSize);
+							}
+
+							if(!player.capabilities.isCreativeMode)
+							{
+								double weightTotalMod = 1.0;
+								for(ItemStack itm : player.inventory.armorInventory)
+									if(itm != null)
+										if(itm.getItem().getMaxDamage() > 500)
+											weightTotalMod /= 2;
+										else
+											weightTotalMod *= 2;
+								
+								if(weight > (200000 / weightTotalMod))
+									player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 500, 0));
+								if(weight > (250000 / weightTotalMod))
+								{
+									player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 500, 1));
+									player.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, 500, 0));
+									player.addPotionEffect(new PotionEffect(Potion.hunger.id, 500, 0));
+								}
+							}
+							System.out.println("Weigh: " + weight);
+							players++;
+						}
+						else
+							System.out.println(o.getClass());
+					}
+					if(players > 0)
+						Thread.sleep(5000);
+				}
+				catch(Throwable th){
+					System.err.println(th);
+					th.printStackTrace();
+					break;
+				}
+			}
+		}
+		catch(Throwable the){
+			run();
+		}
+	}
+}

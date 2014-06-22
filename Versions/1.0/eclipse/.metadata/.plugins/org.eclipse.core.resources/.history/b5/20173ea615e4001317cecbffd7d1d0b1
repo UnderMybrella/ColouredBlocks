@@ -1,0 +1,6 @@
+package org.abimon.mods.minecraft.dnc;
+
+public class WeightThread extends Thread 
+{
+	public static HashMap<Item, int> WEIGHT = new HashMap<Item, Integer>();
+}
