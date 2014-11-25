@@ -1,6 +1,0 @@
-package org.abimon.mods.minecraft.colouredBlocks;
-
-public class UpdateThread extends Thread
-{
-	
-}

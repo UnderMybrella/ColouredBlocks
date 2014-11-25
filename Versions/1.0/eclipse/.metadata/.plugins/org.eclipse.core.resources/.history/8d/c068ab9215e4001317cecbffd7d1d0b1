@@ -1,5 +1,0 @@
-package org.abimon.mods.minecraft.dnc;
-
-public class WeightThread extends Thread {
-
-}

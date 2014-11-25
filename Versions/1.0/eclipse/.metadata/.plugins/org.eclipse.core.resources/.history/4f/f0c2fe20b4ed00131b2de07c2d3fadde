@@ -1,7 +1,0 @@
-package org.abimon.mods.minecraft.dnc;
-
-import baubles.api.IBauble;
-
-public class ItemDnC implements IBauble{
-
-}
